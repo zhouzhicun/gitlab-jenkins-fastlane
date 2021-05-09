@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites>
+  <testsuite name="fastlane.lanes">
+    
+    
+    
+      
+      <testcase classname="fastlane.lanes" name="0: Verifying required fastlane version" time="0.001238">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="1: default_platform" time="0.000976">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="2: modify_environment" time="0.001623">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="3: gym" time="95.323423">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="4: upload_to_svn" time="5.959345">
+        
+      </testcase>
+    
+      
+      <testcase classname="fastlane.lanes" name="5: send_notify_mail" time="0.223913">
+        
+      </testcase>
+    
+  </testsuite>
+</testsuites>

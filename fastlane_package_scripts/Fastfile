@@ -1,0 +1,121 @@
+# Customise this file, documentation can be found here:
+# https://github.com/fastlane/fastlane/tree/master/fastlane/docs
+# All available actions: https://docs.fastlane.tools/actions
+# can also be listed using the `fastlane actions` command
+
+# Change the syntax highlighting to Ruby
+# All lines starting with a # are ignored when running `fastlane`
+
+# If you want to automatically update fastlane if a new version is available:
+# update_fastlane
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version "2.27.0"
+
+require './helper.rb'
+require './ProjectConfig.rb'
+
+
+default_platform :ios
+
+
+puts "start!!!"
+
+#当前日期+时间
+time = Time.new
+curDate = time.strftime("%Y%m%d")
+curTime = time.strftime("%H%M%S")
+
+#ipa包目录
+ipa_output_directiory = "/package"
+ipa_svn_directiory  = "/package_svn"
+
+platform :ios do
+  
+  before_all do
+    # ENV["SLACK_URL"] = "https://hooks.slack.com/services/..."
+    cocoapods
+  end
+
+  desc "打测试包"
+  lane :develop do
+
+    #1 解析jenkins环境配置
+    envArr = Array.new
+    parseEnvironment(envArr)
+
+    envArr.each do |env_item|
+
+      #1 修改环境配置文件
+      environment_file_path = ENV['RootPath'] + Config::Env_file
+      
+      modify_environment(
+        env_Path: environment_file_path,
+        env_Type_Pattern: Config::Env_type_pattern,
+        env_Type: env_item["type"],
+        env_Addr_Pattern: Config::Env_addr_pattern,
+        env_Addr: env_item["addr"]
+      )
+
+      #2 打包
+      ipa_name = generate_ipa_name(Config::Package_scheme, env_item["name"], curDate, curTime)
+      gym(
+        output_directory: ENV['RootPath'] + ipa_output_directiory,
+        output_name: ipa_name,
+        export_method: "development",
+        scheme: Config::Package_scheme,
+        codesigning_identity: Config::Package_Develop_codesigning_identity
+      )
+    end
+  end
+  
+
+  after_all do |lane|
+
+    #3 上传SVN
+    package_svn_path  = Config::Svn_package_path
+    package_svn_path  = package_svn_path + "/" + curDate + "/" + curTime
+    package_path      = ENV['RootPath'] + ipa_output_directiory
+    temp_svn_path     = ENV["RootPath"] + ipa_svn_directiory
+
+    upload_to_svn(
+      package_Path: package_path,
+      remote_svn_path: package_svn_path,
+      local_svn_path: temp_svn_path,
+    )
+
+    #4 发送通知邮件
+    recipients_List = Config::Email_Recipients
+    if !(ENV['Recipients_List'].nil?) && !(ENV['Recipients_List'].empty?)
+      recipients_List = recipients_List + ENV['Recipients_List']
+    end
+    puts recipients_List
+    puts "######################################################"
+    
+    send_notify_mail(
+      endpoint: Config::Email_endpoint,
+      user: Config::Email_user,
+      password: Config::Email_password,
+      recipients: recipients_List,
+      package_svn_path: package_svn_path
+    )
+
+    puts "finish!!!"
+
+  end
+
+  error do |lane, exception|
+    # slack(
+    #   message: exception.message,
+    #   success: false
+    # )
+  end
+end
+
+
+# More information about multiple platforms in fastlane: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
+# All available actions: https://docs.fastlane.tools/actions
+
+# fastlane reports which actions are used
+# No personal data is recorded. Learn more at https://github.com/fastlane/enhancer

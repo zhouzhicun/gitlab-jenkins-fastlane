@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Package_SVN_Remote_Path</key>
+	<string>http://tech.xiaoniu88.net/svn/documents/AppDocuments/XNOnline/%E5%BC%80%E5%8F%91/IOS/XNOnline_test/</string>
+	<key>GitPath</key>
+	<string>http://git.xiaoniugit.com/iOS/XNOnline.git</string>
+	<key>Branch</key>
+	<string>develop</string>
+	<key>RepositoryName</key>
+	<string>XNOnline</string>
+	<key>BundleId</key>
+	<string>com.xiaoniu88.XNOnline</string>
+	<key>DefaultAppName</key>
+	<string>小牛在线</string>
+	<key>ProjectName</key>
+	<string>XNOnline</string>
+	<key>Environment_API_Path</key>
+	<string>/mobile/</string>
+	<key>Environment_Pattern</key>
+	<string>#define Configure_Environment</string>
+	<key>Open_Encrypt_pattern</key>
+	<string>#define Open_App_New_Interface</string>
+	<key>Environment_Address_pattern</key>
+	<string>#define XNO_URL_SCHEME</string>
+	<key>CodeSignIdentity</key>
+	<string>iPhone Developer: Yu Liu (LWCUPRHZZN)</string>
+	<key>XcodeProj_Path</key>
+	<string>XNOnline.xcodeproj/project.pbxproj</string>
+	<key>Environment_File_Path</key>
+	<string>XNOnline/Macro/URLMacro.h</string>
+	<key>Info_Plist_Path</key>
+	<string>XNOnline/Info.plist</string>
+</dict>
+</plist>
